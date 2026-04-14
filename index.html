@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Zxriee Plugins — Global File Sharing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-card: #ffffff;
+            --border: #e2e8f0;
+            --text-primary: #0f172a;
+            --text-secondary: #334155;
+            --text-muted: #64748b;
+            --primary: #4f46e5;
+            --primary-light: #6366f1;
+            --primary-dark: #4338ca;
+            --primary-glow: rgba(79,70,229,0.08);
+            --success: #10b981;
+            --success-dim: rgba(16,185,129,0.1);
+            --danger: #ef4444;
+            --danger-dim: rgba(239,68,68,0.08);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --radius-2xl: 24px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.06);
+            --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.08);
+            --transition: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        .bg-gradient {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        }
+
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.4;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideOutRight {
+            to { opacity: 0; transform: translateX(50px); visibility: hidden; }
+        }
+
+        .animate-fadeInUp {
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 24px 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 48px;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 24px;
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .logo-text {
+            font-size: 26px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .logo-badge {
+            font-size: 10px;
+            background: var(--primary-glow);
+            padding: 4px 12px;
+            border-radius: 20px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-icon {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 10px 20px;
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .btn-icon:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .hero-section {
+            margin-bottom: 48px;
+            border-radius: var(--radius-2xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+
+        .banner-container {
+            position: relative;
+            width: 100%;
+            height: 360px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .banner-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .banner-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .banner-container:hover .banner-overlay {
+            opacity: 1;
+        }
+
+        .banner-btn {
+            background: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            color: var(--primary);
+        }
+
+        .banner-btn:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-md);
+        }
+
+        #bannerInput {
+            display: none;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--primary-glow);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 28px;
+            color: var(--primary);
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .admin-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: 32px;
+            margin-bottom: 48px;
+            position: relative;
+            display: none;
+        }
+
+        .admin-section.show {
+            display: block;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .admin-badge {
+            position: absolute;
+            top: -14px;
+            left: 24px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 6px 20px;
+            border-radius: 40px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-glow);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            color: white;
+            padding: 12px 28px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 48px 0 28px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .section-title h2 {
+            font-size: 28px;
+            font-weight: 800;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .plugin-count {
+            background: var(--primary-glow);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 40px;
+            padding: 10px 20px;
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            font-size: 14px;
+            width: 220px;
+        }
+
+        .plugins-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 28px;
+            margin-bottom: 60px;
+        }
+
+        .plugin-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            transition: var(--transition);
+            animation: fadeInUp 0.5s ease backwards;
+        }
+
+        .plugin-card:nth-child(1) { animation-delay: 0.05s; }
+        .plugin-card:nth-child(2) { animation-delay: 0.1s; }
+        .plugin-card:nth-child(3) { animation-delay: 0.15s; }
+        .plugin-card:nth-child(4) { animation-delay: 0.2s; }
+        .plugin-card:nth-child(5) { animation-delay: 0.25s; }
+
+        .plugin-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .plugin-image {
+            height: 220px;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .plugin-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .plugin-image .no-image {
+            font-size: 64px;
+            color: var(--primary);
+            opacity: 0.4;
+        }
+
+        .plugin-badge {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .plugin-info {
+            padding: 22px;
+        }
+
+        .plugin-name {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .plugin-downloads {
+            font-size: 11px;
+            color: var(--success);
+            background: var(--success-dim);
+            padding: 3px 12px;
+            border-radius: 20px;
+        }
+
+        .plugin-description {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .plugin-meta {
+            display: flex;
+            gap: 16px;
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .plugin-link {
+            background: var(--primary-glow);
+            padding: 10px 14px;
+            border-radius: var(--radius-md);
+            font-size: 11px;
+            font-family: monospace;
+            margin-bottom: 16px;
+            word-break: break-all;
+            color: var(--primary);
+        }
+
+        .plugin-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-download {
+            flex: 1;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            color: white;
+            padding: 12px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .btn-download:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-delete {
+            background: var(--danger-dim);
+            border: 1px solid var(--border);
+            color: var(--danger);
+            padding: 12px 18px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
+        }
+
+        .btn-delete:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 70px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-xl);
+        }
+
+        .empty-state i {
+            font-size: 80px;
+            opacity: 0.3;
+            margin-bottom: 20px;
+        }
+
+        .toast-container {
+            position: fixed;
+            top: 100px;
+            right: 24px;
+            z-index: 1100;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 14px 24px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideInRight 0.3s ease, slideOutRight 0.3s ease 2.8s forwards;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .toast.success { border-left: 4px solid var(--success); }
+        .toast.error { border-left: 4px solid var(--danger); }
+        .toast.info { border-left: 4px solid var(--primary); }
+
+        .login-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .login-box {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: 40px;
+            width: 90%;
+            max-width: 420px;
+            text-align: center;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            margin: 20px 0;
+            font-size: 14px;
+        }
+
+        .login-box button {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            color: white;
+            padding: 14px;
+            border-radius: var(--radius-md);
+            width: 100%;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .login-error {
+            color: var(--danger);
+            font-size: 12px;
+            margin-top: 12px;
+            display: none;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 0 20px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .stat-value { font-size: 28px; }
+            .form-grid { grid-template-columns: 1fr; }
+            .full-width { grid-column: span 1; }
+            .plugins-grid { grid-template-columns: 1fr; }
+            .section-title h2 { font-size: 22px; }
+            .logo-text { font-size: 18px; }
+            .logo-icon { width: 38px; height: 38px; font-size: 18px; }
+            .nav-actions .btn-icon span { display: none; }
+            .search-box input { width: 140px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="bg-gradient"></div>
+<div class="bg-grid"></div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<div class="login-overlay" id="loginOverlay">
+    <div class="login-box">
+        <div class="logo-icon" style="margin: 0 auto 20px;">Z</div>
+        <h2>Admin Access</h2>
+        <p>Enter password to manage plugins</p>
+        <input type="password" id="adminPassword" placeholder="Enter admin password">
+        <button onclick="checkAdminLogin()">Unlock Panel</button>
+        <div class="login-error" id="loginError">Wrong password!</div>
+    </div>
+</div>
+
+<div class="container">
+    <nav>
+        <div class="logo" onclick="location.reload()">
+            <div class="logo-icon">Z</div>
+            <div class="logo-text">Zxriee <span class="logo-badge">CLOUD</span></div>
+        </div>
+        <div class="nav-actions">
+            <button class="btn-icon" id="adminModeBtn" onclick="toggleAdminMode()" style="display:none">
+                <i class="fas fa-user-shield"></i> <span>Admin Mode</span>
+            </button>
+            <button class="btn-icon" id="logoutBtn" onclick="logoutAdmin()" style="display:none">
+                <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="hero-section">
+        <div class="banner-container">
+            <img class="banner-image" id="bannerImage" src="banner.png" alt="Banner" onerror="this.style.display='none'">
+            <div class="banner-overlay">
+                <button class="banner-btn admin-only" onclick="uploadNewBanner()" style="display:none"><i class="fas fa-upload"></i> Change Banner</button>
+            </div>
+        </div>
+        <input type="file" id="bannerInput" accept="image/*" style="display:none">
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-globe"></i></div>
+            <div class="stat-value" id="totalPlugins">0</div>
+            <div class="stat-label">Total Plugins</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-download"></i></div>
+            <div class="stat-value" id="totalDownloads">0</div>
+            <div class="stat-label">Total Downloads</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-calendar"></i></div>
+            <div class="stat-value" id="lastUpdated">-</div>
+            <div class="stat-label">Last Updated</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-cloud"></i></div>
+            <div class="stat-value" id="activeLinks">0</div>
+            <div class="stat-label">Active Links</div>
+        </div>
+    </div>
+
+    <div class="admin-section" id="adminSection">
+        <div class="admin-badge"><i class="fas fa-crown"></i> ADMIN PANEL</div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Plugin Name</label>
+                <input type="text" id="pluginName" placeholder="Enter plugin name">
+            </div>
+            <div class="form-group">
+                <label>Image URL</label>
+                <input type="text" id="pluginImage" placeholder="https://example.com/image.jpg">
+            </div>
+            <div class="form-group full-width">
+                <label>Description</label>
+                <textarea id="pluginDesc" placeholder="Describe the plugin..."></textarea>
+            </div>
+            <div class="form-group full-width">
+                <label>Download Link</label>
+                <input type="text" id="pluginLink" placeholder="https://drive.google.com/...">
+            </div>
+        </div>
+        <div style="display: flex; justify-content: flex-end;">
+            <button class="btn-primary" onclick="addPlugin()"><i class="fas fa-save"></i> Publish Plugin</button>
+        </div>
+    </div>
+
+    <div class="section-header">
+        <div class="section-title">
+            <h2><i class="fas fa-puzzle-piece"></i> Available Plugins</h2>
+            <span class="plugin-count" id="pluginCount">0</span>
+        </div>
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Search plugins..." oninput="filterPlugins()">
+        </div>
+    </div>
+
+    <div class="plugins-grid" id="pluginsGrid">
+        <div class="empty-state">
+            <i class="fas fa-cloud"></i>
+            <p>Loading plugins from cloud...</p>
+        </div>
+    </div>
+
+    <footer>
+        <p><strong>Zxriee Plugins</strong> — Global Cloud File Sharing Platform</p>
+        <p style="margin-top: 8px;">🌍 Accessible from anywhere in the world</p>
+    </footer>
+</div>
+
+<script>
+    // ==================== BACKEND API URL ====================
+    // 🔴 IMPORTANT: Palitan mo ito ng iyong Render.com backend URL!
+    // 🔴 Halimbawa: https://zxriee-backend.onrender.com
+    const API_BASE = "https://YOUR_BACKEND_URL.onrender.com";
+    
+    let isAdmin = false;
+    let plugins = [];
+    let searchQuery = "";
+    const ADMIN_PASSWORD = "zxriee2024";
+
+    // ==================== LOAD PLUGINS ====================
+    async function loadPlugins() {
+        try {
+            const response = await fetch(`${API_BASE}/api/plugins`);
+            plugins = await response.json();
+            renderPlugins();
+            updateStats();
+        } catch (error) {
+            console.error("Error:", error);
+            showToast('Error connecting to cloud server', 'error');
+            document.getElementById('pluginsGrid').innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Cannot connect to cloud server. Please check backend.</p>
+                    <p style="margin-top: 16px; font-size: 12px;">Make sure your backend is running on Render.com</p>
+                </div>
+            `;
+        }
+    }
+
+    function updateStats() {
+        document.getElementById('totalPlugins').textContent = plugins.length;
+        document.getElementById('activeLinks').textContent = plugins.length;
+        const totalDownloads = plugins.reduce((sum, p) => sum + (p.downloads || 0), 0);
+        document.getElementById('totalDownloads').textContent = totalDownloads;
+        if (plugins.length > 0) {
+            const last = new Date(plugins[0].created_at);
+            document.getElementById('lastUpdated').textContent = `${last.getMonth()+1}/${last.getDate()}`;
+        }
+    }
+
+    // ==================== ADMIN LOGIN ====================
+    function checkAdminLogin() {
+        const password = document.getElementById('adminPassword').value;
+        if (password === ADMIN_PASSWORD) {
+            isAdmin = true;
+            sessionStorage.setItem('zxriee_admin', 'true');
+            document.getElementById('loginOverlay').style.display = 'none';
+            document.getElementById('adminSection').classList.add('show');
+            document.getElementById('adminModeBtn').style.display = 'flex';
+            document.getElementById('logoutBtn').style.display = 'flex';
+            document.querySelectorAll('.admin-only').forEach(btn => btn.style.display = 'flex');
+            showToast('Admin access granted!', 'success');
+            renderPlugins();
+        } else {
+            document.getElementById('loginError').style.display = 'block';
+        }
+    }
+
+    function toggleAdminMode() {
+        const section = document.getElementById('adminSection');
+        section.classList.toggle('show');
+    }
+
+    function logoutAdmin() {
+        isAdmin = false;
+        sessionStorage.removeItem('zxriee_admin');
+        document.getElementById('adminSection').classList.remove('show');
+        document.getElementById('adminModeBtn').style.display = 'none';
+        document.getElementById('logoutBtn').style.display = 'none';
+        document.querySelectorAll('.admin-only').forEach(btn => btn.style.display = 'none');
+        document.getElementById('loginOverlay').style.display = 'flex';
+        showToast('Logged out', 'info');
+        renderPlugins();
+    }
+
+    // ==================== BANNER ====================
+    function uploadNewBanner() {
+        const input = document.getElementById('bannerInput');
+        input.click();
+        input.onchange = async (e) => {
+            const file = e.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    localStorage.setItem('zxriee_banner', ev.target.result);
+                    document.getElementById('bannerImage').src = ev.target.result;
+                    document.getElementById('bannerImage').style.display = 'block';
+                    showToast('Banner saved locally!', 'success');
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+    }
+
+    function loadBanner() {
+        const saved = localStorage.getItem('zxriee_banner');
+        if (saved) {
+            document.getElementById('bannerImage').src = saved;
+            document.getElementById('bannerImage').style.display = 'block';
+        }
+    }
+
+    // ==================== PLUGIN CRUD ====================
+    async function addPlugin() {
+        if (!isAdmin) {
+            showToast('Admin access required', 'error');
+            return;
+        }
+
+        const name = document.getElementById('pluginName').value.trim();
+        const image = document.getElementById('pluginImage').value.trim();
+        const desc = document.getElementById('pluginDesc').value.trim();
+        const link = document.getElementById('pluginLink').value.trim();
+
+        if (!name || !desc || !link) {
+            showToast('Please fill all fields', 'error');
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_BASE}/api/plugins`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, image, description: desc, link })
+            });
+            if (response.ok) {
+                await loadPlugins();
+                document.getElementById('pluginName').value = '';
+                document.getElementById('pluginImage').value = '';
+                document.getElementById('pluginDesc').value = '';
+                document.getElementById('pluginLink').value = '';
+                showToast(`✅ "${name}" published globally!`, 'success');
+            }
+        } catch (error) {
+            showToast('Error publishing plugin', 'error');
+        }
+    }
+
+    async function deletePlugin(id) {
+        if (!isAdmin) return;
+        const plugin = plugins.find(p => p.id === id);
+        if (confirm(`Delete "${plugin.name}" permanently? This will affect ALL users.`)) {
+            try {
+                await fetch(`${API_BASE}/api/plugins/${id}`, { method: 'DELETE' });
+                await loadPlugins();
+                showToast('Plugin deleted globally', 'success');
+            } catch (error) {
+                showToast('Error deleting plugin', 'error');
+            }
+        }
+    }
+
+    async function downloadPlugin(id) {
+        const plugin = plugins.find(p => p.id === id);
+        if (plugin) {
+            try {
+                await fetch(`${API_BASE}/api/plugins/${id}/download`, { method: 'POST' });
+                await loadPlugins();
+                window.open(plugin.link, '_blank');
+                showToast(`Opening ${plugin.name}...`, 'success');
+            } catch (error) {
+                showToast('Error', 'error');
+            }
+        }
+    }
+
+    // ==================== UI FUNCTIONS ====================
+    function filterPlugins() {
+        searchQuery = document.getElementById('searchInput').value.toLowerCase();
+        renderPlugins();
+    }
+
+    function renderPlugins() {
+        const grid = document.getElementById('pluginsGrid');
+        const filtered = plugins.filter(p => p.name.toLowerCase().includes(searchQuery));
+        document.getElementById('pluginCount').textContent = filtered.length;
+
+        if (filtered.length === 0) {
+            grid.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas ${searchQuery ? 'fa-search' : 'fa-cloud'}"></i>
+                    <p>${searchQuery ? 'No plugins match your search.' : 'No plugins yet.'}</p>
+                    ${isAdmin && !searchQuery ? '<p style="margin-top: 16px;">Use the admin panel above to add plugins. They will be visible to EVERYONE worldwide!</p>' : ''}
+                </div>
+            `;
+            return;
+        }
+
+        grid.innerHTML = filtered.map(plugin => `
+            <div class="plugin-card">
+                <div class="plugin-image">
+                    ${plugin.image ? 
+                        `<img src="${plugin.image}" alt="${escapeHtml(plugin.name)}" onerror="this.parentElement.innerHTML='<div class=\\'no-image\\'><i class=\\'fas fa-puzzle-piece\\'></i></div>'">` : 
+                        `<div class="no-image"><i class="fas fa-puzzle-piece"></i></div>`
+                    }
+                    <div class="plugin-badge"><i class="fas fa-cloud"></i> CLOUD</div>
+                </div>
+                <div class="plugin-info">
+                    <div class="plugin-name">
+                        <span>${escapeHtml(plugin.name)}</span>
+                        <span class="plugin-downloads"><i class="fas fa-download"></i> ${plugin.downloads || 0}</span>
+                    </div>
+                    <div class="plugin-description">${escapeHtml(plugin.description)}</div>
+                    <div class="plugin-meta">
+                        <span><i class="fas fa-calendar"></i> ${formatDate(plugin.created_at)}</span>
+                        <span><i class="fas fa-cloud-upload-alt"></i> Cloud Stored</span>
+                    </div>
+                    <div class="plugin-link">
+                        <i class="fas fa-link"></i> ${plugin.link.length > 50 ? plugin.link.substring(0, 50) + '...' : plugin.link}
+                    </div>
+                    <div class="plugin-actions">
+                        <button class="btn-download" onclick="downloadPlugin('${plugin.id}')">
+                            <i class="fas fa-download"></i> Download Now
+                        </button>
+                        ${isAdmin ? `<button class="btn-delete" onclick="deletePlugin('${plugin.id}')"><i class="fas fa-trash"></i></button>` : ''}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function formatDate(timestamp) {
+        const date = new Date(timestamp);
+        const now = new Date();
+        const diff = now - date;
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        if (days === 0) return 'Today';
+        if (days === 1) return 'Yesterday';
+        if (days < 7) return `${days} days ago`;
+        return `${date.getMonth()+1}/${date.getDate()}`;
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function showToast(message, type) {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        const icon = type === 'success' ? 'fa-check-circle' : (type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle');
+        toast.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    // ==================== INIT ====================
+    loadBanner();
+    loadPlugins();
+
+    if (sessionStorage.getItem('zxriee_admin') === 'true') {
+        isAdmin = true;
+        document.getElementById('loginOverlay').style.display = 'none';
+        document.getElementById('adminSection').classList.add('show');
+        document.getElementById('adminModeBtn').style.display = 'flex';
+        document.getElementById('logoutBtn').style.display = 'flex';
+        document.querySelectorAll('.admin-only').forEach(btn => btn.style.display = 'flex');
+    }
+</script>
+</body>
+</html>
